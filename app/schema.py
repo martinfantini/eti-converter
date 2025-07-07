@@ -31,6 +31,7 @@ class DataType:
     precision: Optional[int] = field(default=None)
     no_value: str = field(default=None)
     valid_value_by_name: Dict[str, ValidValue] = field(default_factory=dict)
+    is_basic_type: bool = field(default_factory=bool)
 
 # <Member name="MessageHeaderIn" type="MessageHeaderInComp" package="eti_Cash" cardinality="1" description=""/>
 # <Member name="UnderlyingStipGrp" type="UnderlyingStipGrpComp" package="eti_Derivatives" minCardinality="0" cardinality="1" counter="NoUnderlyingStips" description=""/>

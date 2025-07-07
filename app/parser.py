@@ -49,8 +49,14 @@ class Parser:
         no_value_str = attr(node, 'noValue', None)
         range_str = attr(node, 'range', None)
         precision_int = attr(node, 'precision', None)
-        valid_value_by_name_dict = UniqueKeysDict()
 
+        """ define primiteive data type set """
+        PRIMITIVE_DATA_TYPE_LIST = [ "AlphaNumeric", "Counter", "CurrencyType", "Freetext", "ISIN", "LocalMktDate", "LocalMonthYearCod", "PriceType", "Qty", "SeqNum", "String", "UTCTimestamp", "char", "data", "float", "floatDecimal", "floatDecimal4", "floatDecimal6", "floatDecimal7", "int" ]
+        is_basic_type_bool = False
+        if name_str in PRIMITIVE_DATA_TYPE_LIST:
+            is_basic_type_bool = True
+
+        valid_value_by_name_dict = UniqueKeysDict()
         for child in node:
             if child.tag == 'ValidValue':
                 valid_value = self.parse_valid_value_from_node(child)
@@ -71,7 +77,8 @@ class Parser:
             no_value = no_value_str,
             precision = precision_int,
             range = range_str,
-            valid_value_by_name = valid_value_by_name_dict
+            valid_value_by_name = valid_value_by_name_dict,
+            is_basic_type = is_basic_type_bool
         )
 
     def parse_structure_member_from_node(self, node: ET.Element, members: Dict[str, Structures_Member]) -> Structures_Member:
