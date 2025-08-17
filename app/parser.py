@@ -4,15 +4,10 @@
 from __future__ import annotations
 import xml.etree.ElementTree as ET
 from typing import Optional, Dict, Union, Tuple
-from collections import UserDict
-from schema import *
-from xml_helper import *
 
-class UniqueKeysDict(UserDict):
-    def __setitem__(self, key, value):
-        if key in self.data:
-            raise Exception(f'duplicate key "{key}"')
-        self.data[key] = value
+from app.schema import *
+from app.xml_helper import *
+from app.helpers import *
 
 class Parser:
 
@@ -29,6 +24,7 @@ class Parser:
         root = load_xml_from_string(string_xml)
         return Parser(root)
 
+    # <ValidValue name="Required_Tag_Missing" value="1" description="Required Tag Missing"/>
     def parse_valid_value_from_node(self, node: ET.Element) -> ValidValue:
         return ValidValue(
             name = attr(node, 'name'),
@@ -36,6 +32,12 @@ class Parser:
             description = attr(node, 'description', None),
         )
 
+    # <DataType name="SessionRejectReason" type="int" rootType="int" numericID="373" package="eti_Cash" size="4" description="" minValue="0" maxValue="4294967294" noValue="0xFFFFFFFF">
+    #   <ValidValue name="Required_Tag_Missing" value="1" description="Required Tag Missing"/>
+    #   <ValidValue name="Value_is_incorrect" value="5" description="Value is incorrect (out of range) for this tag"/>
+    #   <ValidValue name="Decryption_problem" value="7" description="Decryption problem"/>
+    #   <ValidValue name="Invalid_MsgID" value="11" description="Invalid TemplateID"/>
+    # </DataType>
     def parse_data_type_from_node(self, node: ET.Element) -> DataType:
         name_str = attr(node, 'name')
         primitive_type_str = attr(node, 'type')
@@ -49,12 +51,6 @@ class Parser:
         no_value_str = attr(node, 'noValue', None)
         range_str = attr(node, 'range', None)
         precision_int = attr(node, 'precision', None)
-
-        """ define primiteive data type set """
-        PRIMITIVE_DATA_TYPE_LIST = [ "AlphaNumeric", "Counter", "CurrencyType", "Freetext", "ISIN", "LocalMktDate", "LocalMonthYearCod", "PriceType", "Qty", "SeqNum", "String", "UTCTimestamp", "char", "data", "float", "floatDecimal", "floatDecimal4", "floatDecimal6", "floatDecimal7", "int" ]
-        is_basic_type_bool = False
-        if name_str in PRIMITIVE_DATA_TYPE_LIST:
-            is_basic_type_bool = True
 
         valid_value_by_name_dict = UniqueKeysDict()
         for child in node:
@@ -78,9 +74,10 @@ class Parser:
             precision = precision_int,
             range = range_str,
             valid_value_by_name = valid_value_by_name_dict,
-            is_basic_type = is_basic_type_bool
         )
 
+    # <Member name="MessageHeaderIn" type="MessageHeaderInComp" package="eti_Cash" cardinality="1" description=""/>
+    # <Member name="UnderlyingStipGrp" type="UnderlyingStipGrpComp" package="eti_Derivatives" minCardinality="0" cardinality="1" counter="NoUnderlyingStips" description=""/>
     def parse_structure_member_from_node(self, node: ET.Element, members: Dict[str, Structures_Member]) -> Structures_Member:
         name_str = attr(node, 'name')
         member_type_str = attr(node, 'type')
@@ -103,6 +100,8 @@ class Parser:
             description = description_str
         )
 
+    # <Structure name="XetraEnLightUpdateNegotiationRequest" type="Message" numericID="10801" package="eti_Cash" description="">
+    # <Structure name="BroadcastErrorNotification" type="Message" numericID="10032" package="eti_Cash" description="">
     def parse_structure_structure_from_node(self, node: ET.Element) -> Structures_Structure:
         name_str = attr(node, 'name')
         structure_type = attr(node, 'type')
@@ -139,13 +138,18 @@ class Parser:
     def is_valid_data_type_ref(self, data_type_name: str, data_types: Dict[str, DataType]) -> bool:
         return data_types[data_type_name] != None
 
+    #<Member name="AutoExecMinNoOfQuotes" type="AutoExecMinNoOfQuotes" package="eti_Cash" numericID="28793" usage="optional" offset="100" cardinality="1" description=""/>
+    #<Member name="NoTargetPartyIDs" type="NoTargetPartyIDs" package="eti_Cash" numericID="1461" usage="mandatory" offset="104" cardinality="1" description=""/>
+    #<Member name="NumberOfRespDisclosureInstruction" type="NumberOfRespDisclosureInstruction" package="eti_Cash" numericID="25145" usage="mandatory" offset="105" cardinality="1" description="">
+    #    <ValidValue name="No" value="0" description="No"/>
+    #    <ValidValue name="Yes" value="1" description="Yes"/>
+    #</Member>
     def parse_application_message_member_from_node(self, node: ET.Element, data_types: Dict[str, DataType]) -> ApplicationMessage_Member:
         name_str = attr(node, 'name')
         hidden_bool = attr(node, 'hidden', False)
         member_type_str = attr(node, 'type')
         if member_type_str != None and not self.is_valid_data_type_ref(member_type_str, data_types):
             raise Exception(f'member "{name_str}" has a type "{member_type_str}" is not valid')
-        data_type_ref = self.get_data_type_ref(member_type_str, data_types)
         
         package_str = attr(node, 'package')
         numeric_id_int = attr(node, 'numericID')
@@ -153,11 +157,13 @@ class Parser:
         offset_int = attr(node, 'offset')
         cardinality_int = attr(node, 'cardinality')
         description_str = attr(node, 'description', None)
+        offset_base_str = attr(node, 'offsetBase', None)
         valid_value_dict = UniqueKeysDict()
 
         for child in node:
             if child.tag == 'ValidValue':
                 valid_value = self.parse_valid_value_from_node(child)
+                data_type_ref = self.get_data_type_ref(member_type_str, data_types)
                 found_valid_value = self.get_valid_value_ref_in_data_type(data_type_ref, valid_value.name)
                 if valid_value.name != found_valid_value.name or valid_value.value != found_valid_value.value:
                     raise Exception(f'valid values "{valid_value.name}" has a valid "{valid_value.value}" value')
@@ -175,9 +181,17 @@ class Parser:
             offset = offset_int,
             cardinality = cardinality_int,
             description = description_str,
-            valid_value_by_name=valid_value_dict
+            offset_base = offset_base_str,
+            valid_value_by_name=valid_value_dict,
         )
 
+    # <Group name="SecurityStatusEventGrp" type="SecurityStatusEventGrpComp" package="eti_Cash" minCardinality="0" cardinality="2" counter="NoEvents" description="">
+    # <Group name="MessageHeaderIn" type="MessageHeaderInComp" package="eti_Cash" cardinality="1" description="">
+    #    <Member name="BodyLen" type="BodyLen" package="eti_Cash" numericID="9" usage="mandatory" offset="0" cardinality="1" description=""/>
+    #    <Member name="TemplateID" type="TemplateID" package="eti_Cash" numericID="28500" usage="mandatory" offset="4" cardinality="1" description=""/>
+    #    <Member name="NetworkMsgID" type="NetworkMsgID" package="eti_Cash" numericID="25028" usage="unused" offset="6" cardinality="1" description=""/>
+    #    <Member name="Pad2" type="Pad2" package="eti_Cash" numericID="39020" usage="unused" offset="14" cardinality="1" description=""/>
+    # </Group>
     def parse_application_message_group_from_node(self, node: ET.Element, fields: Dict[str, Union[ApplicationMessage_Member, ApplicationMessage_Group]], data_types: Dict[str, DataType] ) -> ApplicationMessage_Group:
         name_str = attr(node, 'name')
         group_type_str = attr(node, 'type')
@@ -203,11 +217,10 @@ class Parser:
             package = package_str,
             min_cardinality = min_cardinality_int,
             cardinality = cardinality_int,
-            counter = counter_str,
             description = description_str,
             members = members_dict
         )
-
+    # <ApplicationMessage name="XetraEnLightUpdateNegotiationRequest" package="eti_Cash" type="XetraEnLightUpdateNegotiationRequest" numericID="10801" description="" functionalCategory="Selective Request for Quote Service " alias="Xetra EnLight Update Negotiation Request" service="Selective Request for Quote Service">
     def parse_application_message_from_node(self, node: ET.Element, data_types: Dict[str, DataType]) -> ApplicationMessage:
         name_str = attr(node, 'name')
         package_str = attr(node, 'package')
@@ -226,9 +239,11 @@ class Parser:
             elif child.tag == 'Group':
                 group_value = self.parse_application_message_group_from_node(child, members_or_groups_dict, data_types)
                 members_or_groups_dict[group_value.name] = group_value
+                if group_value.cardinality == None:
+                    raise Exception(f'member "{group_value.name}" from the message "{name_str} has no cardinality "{group_value.cardinality}"')
             else:
                 raise Exception(f'unexpected tag "{child.tag}" inside "{name_str}" application message')
-        
+
         return ApplicationMessage(
             name = name_str,
             package = package_str,
@@ -266,9 +281,18 @@ class Parser:
             message_by_id[message.numeric_id] = message
         return message_by_name
 
+    def get_groups(self, application_messages: Dict[str, ApplicationMessage]) -> Dict[str, ApplicationMessage_Group]:
+        group_by_name = UniqueKeysDict()
+        for application_message in application_messages.values():
+            for member_or_group in application_message.members_or_groups.values():
+                if isinstance(member_or_group, ApplicationMessage_Group):
+                    if not member_or_group.name in group_by_name.keys():
+                        group_by_name[member_or_group.name] = member_or_group
+        return group_by_name
+
     def get_schema(self) -> Schema:
         if self.root.tag != "Model":
-            raise Exception(f'not found Model tag at the beggining')
+            raise Exception(f'not found Model tag at the beginning')
         model_node  = self.root
         name_str = attr(model_node, 'name')
         version_str = attr(model_node, 'version')
@@ -278,13 +302,16 @@ class Parser:
         data_types_dic = self.get_data_types()
         structures_dict = self.get_structures()
         application_messages_dict = self.get_application_messages(data_types_dic)
+        groups_dict = self.get_groups(application_messages_dict)
 
         return Schema(
             name = name_str,
             version = version_str,
             sub_version = sub_version_str,
             build_number = build_number_str,
+            byte_order = ByteOrder.LITTLE_ENDIAN,
             data_types = data_types_dic,
             structure = structures_dict,
+            groups = groups_dict,
             application_messages = application_messages_dict
         )

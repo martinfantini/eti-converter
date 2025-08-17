@@ -1,5 +1,8 @@
+# Copyright (C) 2025 R. Martin Fantini <martin.fantini@gmail.com>
+# This file may be distributed under the terms of the GNU GPLv3 license
+
 import unittest
-from parser import Parser
+from parser import *
 from schema import *
 
 class Testing_Parser(unittest.TestCase):
@@ -299,6 +302,7 @@ class Testing_Parser(unittest.TestCase):
         parser_result = Parser.from_string(xml_ref)
         data_types_dict = parser_result.get_data_types()
         application_messages_dict = parser_result.get_application_messages(data_types_dict)
+        group_dict = parser_result.get_groups(application_messages_dict)
 
         application_messages_BEN = application_messages_dict["BroadcastErrorNotification"]
         self.assertEqual(application_messages_BEN.name, "BroadcastErrorNotification")
@@ -326,7 +330,7 @@ class Testing_Parser(unittest.TestCase):
         self.assertEqual(group_MHO_member_BL.member_type, "BodyLen")
         self.assertEqual(group_MHO_member_BL.package, "eti_Cash")
         self.assertEqual(group_MHO_member_BL.numeric_id, '9')
-        self.assertEqual(group_MHO_member_BL.usage, ApplicationMessage_Usage.MANDATORY)
+        self.assertEqual(group_MHO_member_BL.usage.value, ApplicationMessage_Usage.MANDATORY.value)
         self.assertEqual(group_MHO_member_BL.offset, '0')
         self.assertEqual(group_MHO_member_BL.cardinality, '1')
         self.assertEqual(group_MHO_member_BL.description, "")
@@ -336,13 +340,18 @@ class Testing_Parser(unittest.TestCase):
         self.assertEqual(group_MHO_member_Pad2.member_type, "Pad2")
         self.assertEqual(group_MHO_member_Pad2.package, "eti_Cash")
         self.assertEqual(group_MHO_member_Pad2.numeric_id, '39020')
-        self.assertEqual(group_MHO_member_Pad2.usage, ApplicationMessage_Usage.UNUSED)
+        self.assertEqual(group_MHO_member_Pad2.usage.value, ApplicationMessage_Usage.UNUSED.value)
         self.assertEqual(group_MHO_member_Pad2.offset, '6')
         self.assertEqual(group_MHO_member_Pad2.cardinality, '1')
         self.assertEqual(group_MHO_member_Pad2.description, "")
 
+        self.assertEqual(len(group_dict), 2)
+        group_dict_MessageHeaderOut = group_dict["MessageHeaderOut"]
+
+        group_dict_NotifHeader = group_dict["NotifHeader"]
+
     def test_schema(self):
-        parser_result = Parser.from_file("../resources/eti_Cash.xml")
+        parser_result = Parser.from_file("resources/eti_Cash.xml")
         schema_result = parser_result.get_schema()
 
         self.assertEqual(schema_result.name, "eti_Cash")
@@ -424,7 +433,7 @@ class Testing_Parser(unittest.TestCase):
         self.assertEqual(group_MHO_member_BL.member_type, "BodyLen")
         self.assertEqual(group_MHO_member_BL.package, "eti_Cash")
         self.assertEqual(group_MHO_member_BL.numeric_id, '9')
-        self.assertEqual(group_MHO_member_BL.usage, ApplicationMessage_Usage.MANDATORY)
+        self.assertEqual(group_MHO_member_BL.usage.value, ApplicationMessage_Usage.MANDATORY.value)
         self.assertEqual(group_MHO_member_BL.offset, '0')
         self.assertEqual(group_MHO_member_BL.cardinality, '1')
         self.assertEqual(group_MHO_member_BL.description, "")
@@ -434,7 +443,7 @@ class Testing_Parser(unittest.TestCase):
         self.assertEqual(group_MHO_member_Pad2.member_type, "Pad2")
         self.assertEqual(group_MHO_member_Pad2.package, "eti_Cash")
         self.assertEqual(group_MHO_member_Pad2.numeric_id, '39020')
-        self.assertEqual(group_MHO_member_Pad2.usage, ApplicationMessage_Usage.UNUSED)
+        self.assertEqual(group_MHO_member_Pad2.usage.value, ApplicationMessage_Usage.UNUSED.value)
         self.assertEqual(group_MHO_member_Pad2.offset, '6')
         self.assertEqual(group_MHO_member_Pad2.cardinality, '1')
         self.assertEqual(group_MHO_member_Pad2.description, "")
