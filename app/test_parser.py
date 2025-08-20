@@ -2,8 +2,8 @@
 # This file may be distributed under the terms of the GNU GPLv3 license
 
 import unittest
-from parser import *
-from schema import *
+from app.parser import *
+from app.schema import *
 
 class Testing_Parser(unittest.TestCase):
 
