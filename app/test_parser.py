@@ -352,7 +352,7 @@ class Testing_Parser(unittest.TestCase):
 
     def test_schema(self):
         parser_result = Parser.from_file("resources/eti_Cash.xml")
-        schema_result = parser_result.get_schema()
+        schema_result = parser_result.get_schema(None, None)
 
         self.assertEqual(schema_result.name, "eti_Cash")
         self.assertEqual(schema_result.version, "13.1")
