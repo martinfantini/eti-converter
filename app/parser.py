@@ -292,11 +292,13 @@ class Parser:
                         group_by_name[member_or_group.name] = member_or_group
         return group_by_name
 
-    def get_schema(self) -> Schema:
+    def get_schema(self, byte_order: ByteOrder | None, package_name: str | None ) -> Schema:
         if self.root.tag != "Model":
             raise Exception(f'not found Model tag at the beginning')
         model_node  = self.root
         name_str = attr(model_node, 'name')
+        if package_name != None:
+            name_str = package_name
         version_str = attr(model_node, 'version')
         sub_version_str = attr(model_node, 'subVersion')
         build_number_str = attr(model_node, 'buildNumber')
@@ -306,12 +308,16 @@ class Parser:
         application_messages_dict = self.get_application_messages(data_types_dic)
         groups_dict = self.get_groups(application_messages_dict)
 
+        schema_byte_order = ByteOrder.LITTLE_ENDIAN
+        if byte_order != None:
+            schema_byte_order = byte_order
+
         return Schema(
             name = name_str,
             version = version_str,
             sub_version = sub_version_str,
             build_number = build_number_str,
-            byte_order = ByteOrder.LITTLE_ENDIAN,
+            byte_order = schema_byte_order,
             data_types = data_types_dic,
             structure = structures_dict,
             groups = groups_dict,
