@@ -217,9 +217,11 @@ class Parser:
             package = package_str,
             min_cardinality = min_cardinality_int,
             cardinality = cardinality_int,
+            counter = counter_str,
             description = description_str,
-            members = members_dict
+            members = members_dict,
         )
+
     # <ApplicationMessage name="XetraEnLightUpdateNegotiationRequest" package="eti_Cash" type="XetraEnLightUpdateNegotiationRequest" numericID="10801" description="" functionalCategory="Selective Request for Quote Service " alias="Xetra EnLight Update Negotiation Request" service="Selective Request for Quote Service">
     def parse_application_message_from_node(self, node: ET.Element, data_types: Dict[str, DataType]) -> ApplicationMessage:
         name_str = attr(node, 'name')
