@@ -71,6 +71,7 @@ class GroupDataTypeDefinition:
 class GroupDefinition:
     name: str = field(default_factory=str)
     counter: str = field(default_factory=str)
+    cardinality: int = field(default=0)
     members: Dict[str, GroupDataTypeDefinition] = field(default_factory=dict)
 
 @dataclass(frozen=True)

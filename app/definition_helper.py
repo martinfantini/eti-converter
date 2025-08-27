@@ -174,6 +174,7 @@ class DefinitionHelper:
         return GroupDefinition(
             name = parsed_group.name,
             counter = parsed_group.counter,
+            cardinality = parsed_group.cardinality,
             members = members_dict,
         )
 

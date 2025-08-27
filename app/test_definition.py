@@ -207,6 +207,18 @@ class Testing_Definition(unittest.TestCase):
         result_dataType_definition = DefinitionHelper.get_data_type_definition_dict(data_types_dict)
         result_group_definition_dict = DefinitionHelper.get_group_definition_dict(application_messages_dict, result_dataType_definition)
 
+        result_group_definition_InstrmtLegGrp = result_group_definition_dict["InstrmtLegGrp"]
+        self.assertEqual(result_group_definition_InstrmtLegGrp.name, "InstrmtLegGrp")
+        self.assertEqual(result_group_definition_InstrmtLegGrp.counter, 'NoLegOnbooks')
+        self.assertEqual(result_group_definition_InstrmtLegGrp.cardinality, '144')
+        self.assertEqual(len(result_group_definition_InstrmtLegGrp.members), 2)
+
+        result_group_definition_MessageHeaderOut = result_group_definition_dict["MessageHeaderOut"]
+        self.assertEqual(result_group_definition_MessageHeaderOut.name, "MessageHeaderOut")
+        self.assertEqual(result_group_definition_MessageHeaderOut.counter, None)
+        self.assertEqual(result_group_definition_MessageHeaderOut.cardinality, '1')
+        self.assertEqual(len(result_group_definition_MessageHeaderOut.members), 3)
+
     def test_get_message_definition_dict(self):
   
         parser_result = Parser.from_string((Testing_Definition.XML_REF_LONG))
@@ -216,3 +228,10 @@ class Testing_Definition(unittest.TestCase):
         result_group_definition_dict = DefinitionHelper.get_group_definition_dict(application_messages_dict, result_dataType_definition)
         result_message_definition = DefinitionHelper.get_message_definition_dict(application_messages_dict, result_dataType_definition, result_group_definition_dict)
 
+        self.assertEqual(len(result_message_definition), 1)
+
+        result_message_definition_BroadcastErrorNotification = result_message_definition["BroadcastErrorNotification"]
+        self.assertEqual(result_message_definition_BroadcastErrorNotification.numeric_id, '10032')
+        self.assertEqual(result_message_definition_BroadcastErrorNotification.name, "BroadcastErrorNotification")
+        self.assertEqual(result_message_definition_BroadcastErrorNotification.package, "eti_Cash")
+        self.assertEqual(len(result_message_definition_BroadcastErrorNotification.members_or_groups), 11)
