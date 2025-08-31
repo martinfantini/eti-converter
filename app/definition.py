@@ -83,3 +83,4 @@ class SchemaDefinition:
     sub_version: str = field(default_factory=str)
     build_number: str = field(default_factory=str)
     byte_order: ByteOrder = field(default=ByteOrder.LITTLE_ENDIAN)
+    name: str = field(default_factory=str)

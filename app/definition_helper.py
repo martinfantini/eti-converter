@@ -269,4 +269,5 @@ class DefinitionHelper:
             sub_version = parsed_schema.sub_version,
             build_number = parsed_schema.build_number,
             byte_order = parsed_schema.byte_order,
+            name = parsed_schema.name,
         )
