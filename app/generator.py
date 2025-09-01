@@ -148,7 +148,7 @@ class GeneratorBase(ABC):
         return result_dict
 
     @staticmethod
-    def make_group_definition(application_definition: ApplicationMessageDefinition) -> dict:
+    def make_application_definition(application_definition: ApplicationMessageDefinition) -> dict:
         result_dict = {
             'name': application_definition.name,
             'numeric_id': application_definition.numeric_id,
