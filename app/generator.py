@@ -115,7 +115,7 @@ class GeneratorBase(ABC):
         for group_definition in group_definition.members.values():
             member_values.append(GeneratorBase.make_group_definition_members(group_definition))
         result_dict['members'] = member_values
-        
+
         return result_dict
 
     @staticmethod
