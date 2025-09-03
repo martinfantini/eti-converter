@@ -447,3 +447,17 @@ class Testing_Parser(unittest.TestCase):
         self.assertEqual(group_MHO_member_Pad2.offset, '6')
         self.assertEqual(group_MHO_member_Pad2.cardinality, '1')
         self.assertEqual(group_MHO_member_Pad2.description, "")
+
+    def test_generator_from_file_eti_Cash(self):
+        parser_result = Parser.from_file("resources/eti_Cash.xml")
+        schema_result = parser_result.get_schema(ByteOrder.BIG_ENDIAN, None)
+
+        self.assertEqual(len(schema_result.application_messages), 137)
+        self.assertEqual(len(schema_result.data_types), 443)
+
+    def test_generator_from_file_eti_Derivatives(self):
+        parser_result = Parser.from_file("resources/eti_Derivatives.xml")
+        schema_result = parser_result.get_schema(ByteOrder.BIG_ENDIAN, None)
+
+        self.assertEqual(len(schema_result.application_messages), 161)
+        self.assertEqual(len(schema_result.data_types), 532)
