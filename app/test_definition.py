@@ -193,8 +193,8 @@ class Testing_Definition(unittest.TestCase):
         result_ApplID = result["ApplID"]
         self.assertEqual(result_ApplID.name , "ApplID")
         self.assertEqual(result_ApplID.type , "uint8")
-        self.assertEqual(result_ApplID.numeric_id , "1180")
-        self.assertEqual(result_ApplID.size_bytes , "1")
+        self.assertEqual(result_ApplID.numeric_id , 1180)
+        self.assertEqual(result_ApplID.size_bytes , 1)
         self.assertEqual(result_ApplID.no_value , "0xFF")
         self.assertEqual(result_ApplID.precision , None)
         self.assertEqual(len(result_ApplID.valid_value_definition_by_name) , 11)
@@ -220,7 +220,6 @@ class Testing_Definition(unittest.TestCase):
         self.assertEqual(len(result_group_definition_MessageHeaderOut.members), 3)
 
     def test_get_message_definition_dict(self):
-  
         parser_result = Parser.from_string((Testing_Definition.XML_REF_LONG))
         data_types_dict = parser_result.get_data_types()
         application_messages_dict = parser_result.get_application_messages(data_types_dict)
@@ -235,3 +234,24 @@ class Testing_Definition(unittest.TestCase):
         self.assertEqual(result_message_definition_BroadcastErrorNotification.name, "BroadcastErrorNotification")
         self.assertEqual(result_message_definition_BroadcastErrorNotification.package, "eti_Cash")
         self.assertEqual(len(result_message_definition_BroadcastErrorNotification.members_or_groups), 11)
+
+    def test_get_definition_eti_Cash(self):
+        parser_result = Parser.from_file("resources/eti_Cash.xml")
+        schema_result = parser_result.get_schema(ByteOrder.BIG_ENDIAN, None, "BodyLen,TemplateID".split(','))
+        schema_definition_result = DefinitionHelper.get_schema_definition(schema_result)
+        
+        groupDefinition_MessageHeaderIn = schema_definition_result.groupDefinition["MessageHeaderIn"]
+        self.assertEqual(groupDefinition_MessageHeaderIn.size_bytes, 16)
+
+        groupDefinition_RequestHeader = schema_definition_result.groupDefinition["RequestHeader"]
+        self.assertEqual(groupDefinition_RequestHeader.size_bytes, 8)
+
+        message_definition_RetransmitMEMessageRequest = schema_definition_result.messageDefinition["RetransmitMEMessageRequest"]
+        self.assertEqual(message_definition_RetransmitMEMessageRequest.size_bytes, 64)
+
+    def test_get_definition_eti_Derivatives(self):
+        parser_result = Parser.from_file("resources/eti_Derivatives.xml")
+        schema_result = parser_result.get_schema(ByteOrder.BIG_ENDIAN, None, "BodyLen,TemplateID".split(','))
+        schema_definition_result = DefinitionHelper.get_schema_definition(schema_result)
+        message_definition_RetransmitMEMessageRequest = schema_definition_result.messageDefinition["RetransmitMEMessageRequest"]
+        self.assertEqual(message_definition_RetransmitMEMessageRequest.size_bytes, 64)

@@ -37,7 +37,7 @@ class ApplicationMessageDefinition:
     name: str = field(default_factory=str)
     numeric_id: int = field(default=None)
     package: str = field(default_factory=str)
-    size: int = field(default=0)
+    size_bytes: int = field(default=0)
     members_or_groups: Dict[str, Union[ApplicationMessageMemberDefinition, ApplicationMessageGroupDefinition]] = field(default_factory=dict)
 
 # <Member name="MsgType" hidden="true" type="MsgType" package="eti_Cash" numericID="35" usage="unused" offset="0" cardinality="1" description="">
@@ -48,7 +48,7 @@ class ApplicationMessageMemberDefinition:
     cardinality: int = field(default=1)
     usage: UsageDefinition = field(default=UsageDefinition.OPTIONAL)
     hidden: bool = field(default_factory=bool)
-    size: int = field(default=0)
+    size_bytes: int = field(default=0)
     dataType: DataTypDefinition = field(default=None)
 
 # <Group name="SecurityStatusEventGrp" type="SecurityStatusEventGrpComp" package="eti_Cash" minCardinality="0" cardinality="2" counter="NoEvents" description="">  
@@ -58,8 +58,8 @@ class ApplicationMessageGroupDefinition:
     counter: DataTypDefinition = field(default=None)
     min_cardinality: Optional[int] = field(default=None)
     cardinality: int = field(default=1)
-    size: int = field(default=0)
     groupType: GroupDefinition = field(default=None)
+    size_bytes: int = field(default=0)
 
 @dataclass(frozen=True)
 class GroupDataTypeDefinition:
@@ -69,14 +69,15 @@ class GroupDataTypeDefinition:
     offsetBase: int = field(default=None)
     cardinality: int = field(default=1)
     dataType: DataTypDefinition = field(default=None)
+    size_bytes: int = field(default=0)
 
 @dataclass(frozen=True)
 class GroupDefinition:
     name: str = field(default_factory=str)
     counter: str = field(default_factory=str)
     cardinality: int = field(default=0)
-    size: int = field(default=0)
     members: Dict[str, GroupDataTypeDefinition] = field(default_factory=dict)
+    size_bytes: int = field(default=0)
 
 @dataclass(frozen=True)
 class SchemaDefinition:

@@ -30,7 +30,7 @@ class DefinitionHelper:
                                 "floatDecimal4",
                                 "floatDecimal6",
                                 "floatDecimal7",
-                                "int"
+                                "int",
                             ]
 
     """ define special cases for searching none with the other types """
@@ -47,39 +47,40 @@ class DefinitionHelper:
     """ define primiteive data type conversion """
     PRIMITIVE_TYPE_BY_DEFINITION = UniqueKeysDict({
         PrimitiveDefinition('AlphaNumeric', None, None): 'char',
-        PrimitiveDefinition('Counter', '1', '0'): 'uint8',
-        PrimitiveDefinition('Counter', '1', None): 'int8',
-        PrimitiveDefinition('Counter', '2', '0'): 'uint16',
-        PrimitiveDefinition('Counter', '2', None): 'int16',
-        PrimitiveDefinition('Counter', '4', '0'): 'uint32',
-        PrimitiveDefinition('Counter', '4', None): 'int32',
-        PrimitiveDefinition('Counter', '8', '0'): 'uint64',
-        PrimitiveDefinition('Counter', '8', None): 'int64',
+        PrimitiveDefinition('Counter', 1, '0'): 'uint8',
+        PrimitiveDefinition('Counter', 1, None): 'int8',
+        PrimitiveDefinition('Counter', 2, '0'): 'uint16',
+        PrimitiveDefinition('Counter', 2, None): 'int16',
+        PrimitiveDefinition('Counter', 4, '0'): 'uint32',
+        PrimitiveDefinition('Counter', 4, None): 'int32',
+        PrimitiveDefinition('Counter', 8, '0'): 'uint64',
+        PrimitiveDefinition('Counter', 8, None): 'int64',
         PrimitiveDefinition('CurrencyType', None, None): 'char',
         PrimitiveDefinition('Freetext', None, None): 'char',
         PrimitiveDefinition('ISIN', None, None): 'char',
-        PrimitiveDefinition('LocalMktDate', '4', '0'): 'uint32',
-        PrimitiveDefinition('LocalMonthYearCod', '4', '0'): 'uint32',
-        PrimitiveDefinition('PriceType', '8', '0'): 'double',
-        PrimitiveDefinition('Qty', '8', '0'): 'double',
-        PrimitiveDefinition('SeqNum', '8', '0'): 'uint64',
+        PrimitiveDefinition('LocalMktDate', 4, '0'): 'uint32',
+        PrimitiveDefinition('LocalMonthYearCod', 4, '0'): 'uint32',
+        PrimitiveDefinition('PriceType', 8, '0'): 'double',
+        PrimitiveDefinition('Qty', 8, '0'): 'double',
+        PrimitiveDefinition('SeqNum', 8, '0'): 'uint64',
         PrimitiveDefinition('String', None, None): 'string',
-        PrimitiveDefinition('UTCTimestamp', '8', '0'): 'uint64',
+        PrimitiveDefinition('UTCTimestamp', 8, '0'): 'uint64',
         PrimitiveDefinition('char', None, None): 'char',
         PrimitiveDefinition('data', None, None): 'char',
+        PrimitiveDefinition('data', 16, None): 'char',
         PrimitiveDefinition('float', None, None): 'double',
         PrimitiveDefinition('floatDecimal', None, None): 'double',
         PrimitiveDefinition('floatDecimal4', None, None): 'double',
         PrimitiveDefinition('floatDecimal6', None, None): 'double',
         PrimitiveDefinition('floatDecimal7', None, None): 'double',
-        PrimitiveDefinition('int', '1', '0'): 'uint8',
-        PrimitiveDefinition('int', '1', None): 'int8',
-        PrimitiveDefinition('int', '2', '0'): 'uint16',
-        PrimitiveDefinition('int', '2', None): 'int16',
-        PrimitiveDefinition('int', '4', '0'): 'uint32',
-        PrimitiveDefinition('int', '4', None): 'int32',
-        PrimitiveDefinition('int', '8', '0'): 'uint64',
-        PrimitiveDefinition('int', '8', None): 'int64',
+        PrimitiveDefinition('int', 1, '0'): 'uint8',
+        PrimitiveDefinition('int', 1, None): 'int8',
+        PrimitiveDefinition('int', 2, '0'): 'uint16',
+        PrimitiveDefinition('int', 2, None): 'int16',
+        PrimitiveDefinition('int', 4, '0'): 'uint32',
+        PrimitiveDefinition('int', 4, None): 'int32',
+        PrimitiveDefinition('int', 8, '0'): 'uint64',
+        PrimitiveDefinition('int', 8, None): 'int64',
     })
 
     @staticmethod
@@ -133,6 +134,8 @@ class DefinitionHelper:
     def get_data_type_definition_dict(data_types: Dict[str, DataType]) -> Dict[str, DataTypDefinition]:
         dataTypeDefinition_dict = UniqueKeysDict()
         for data_type in data_types.values():
+            if data_type.name in DefinitionHelper.PRIMITIVE_DATA_TYPE_LIST:
+                continue
             result = DefinitionHelper.get_data_type_definition(data_type)
             dataTypeDefinition_dict[result.name] = result
         return dataTypeDefinition_dict
@@ -161,21 +164,25 @@ class DefinitionHelper:
             offset = parsed_application_member.offset,
             offsetBase = parsed_application_member.offset_base,
             cardinality = parsed_application_member.cardinality,
-            dataType = result_data_type_definition
+            dataType = result_data_type_definition,
+            size_bytes = result_data_type_definition.size_bytes,
         )
 
     @staticmethod
     def get_group_definition(parsed_group: ApplicationMessage_Group, dataType_definition: Dict[str, DataTypDefinition]) -> GroupDefinition:
         members_dict = UniqueKeysDict()
+        size_bytes_count = 0
         for member in parsed_group.members.values():
             result_member =  DefinitionHelper.get_group_data_type_definition(member, dataType_definition)
             members_dict[result_member.name] = result_member
+            size_bytes_count += result_member.size_bytes
 
         return GroupDefinition(
             name = parsed_group.name,
             counter = parsed_group.counter,
             cardinality = parsed_group.cardinality,
             members = members_dict,
+            size_bytes = size_bytes_count,
         )
 
     @staticmethod
@@ -202,6 +209,7 @@ class DefinitionHelper:
             cardinality = parsed_member.cardinality,
             hidden = parsed_member.hidden,
             dataType = result_data_type_definition,
+            size_bytes = result_data_type_definition.size_bytes,
             usage = usage_result,
         )
 
@@ -225,19 +233,24 @@ class DefinitionHelper:
             counter = counter_data_type,
             min_cardinality = parsed_group.min_cardinality,
             cardinality = parsed_group.cardinality,
-            groupType = group_definition
+            groupType = group_definition,
+            size_bytes = group_definition.size_bytes,
         )
 
     @staticmethod
     def get_message_definition(parsed_message: ApplicationMessage, dataType_definition: Dict[str, DataTypDefinition], groupType_definition: Dict[str, GroupDefinition]) -> ApplicationMessageDefinition:
         members_or_groups_dict = UniqueKeysDict()
+        size_bytes_count = 0
         for parsed_application_message_members in parsed_message.members_or_groups.values():
             if isinstance(parsed_application_message_members, ApplicationMessage_Member):
                 result =  DefinitionHelper.get_application_message_member_definition(parsed_application_message_members, dataType_definition)
                 members_or_groups_dict[result.name] = result
+                if not result.hidden:
+                    size_bytes_count += result.size_bytes
             elif isinstance(parsed_application_message_members, ApplicationMessage_Group):
                 result =  DefinitionHelper.get_application_message_group_definition(parsed_application_message_members, dataType_definition, groupType_definition)
                 members_or_groups_dict[result.name] = result
+                size_bytes_count += result.size_bytes
             else:
                 raise Exception(f'Error in internal type "{parsed_application_message_members.name}" is not a group or member')
 
@@ -246,6 +259,7 @@ class DefinitionHelper:
             numeric_id = parsed_message.numeric_id,
             package = parsed_message.package,
             members_or_groups = members_or_groups_dict,
+            size_bytes = size_bytes_count
         )
 
     @staticmethod

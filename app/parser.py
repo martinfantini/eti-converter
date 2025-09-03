@@ -29,7 +29,7 @@ class Parser:
         return ValidValue(
             name = attr(node, 'name'),
             value = attr(node, 'value'),
-            description = attr(node, 'description', None),
+            description = attr(node, 'description'),
         )
 
     # <DataType name="SessionRejectReason" type="int" rootType="int" numericID="373" package="eti_Cash" size="4" description="" minValue="0" maxValue="4294967294" noValue="0xFFFFFFFF">
@@ -42,15 +42,15 @@ class Parser:
         name_str = attr(node, 'name')
         primitive_type_str = attr(node, 'type')
         root_type_str = attr(node, 'rootType')
-        numeric_id_int = attr(node, 'numericID', None)
+        numeric_id_int = attr(node, 'numericID', None, int)
         package_str = attr(node, 'package')
-        primitive_size_int = attr(node, 'size', None)
+        primitive_size_int = attr(node, 'size', None, int)
         description_str = attr(node, 'description', None)
         min_value_str = attr(node, 'minValue', None)
         max_value_str = attr(node, 'maxValue', None)
         no_value_str = attr(node, 'noValue', None)
         range_str = attr(node, 'range', None)
-        precision_int = attr(node, 'precision', None)
+        precision_int = attr(node, 'precision', None, int)
 
         valid_value_by_name_dict = UniqueKeysDict()
         for child in node:
