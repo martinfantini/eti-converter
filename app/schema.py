@@ -126,3 +126,4 @@ class Schema:
     structure: Dict[str, Structures_Structure] = field(default_factory=dict)
     groups: Dict[str, ApplicationMessage_Group] = field(default_factory=dict)
     application_messages: Dict[str, ApplicationMessage] = field(default_factory=dict)
+    initial_message_fields: list[str] = field(default_factory=list)

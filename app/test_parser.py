@@ -352,12 +352,16 @@ class Testing_Parser(unittest.TestCase):
 
     def test_schema(self):
         parser_result = Parser.from_file("resources/eti_Cash.xml")
-        schema_result = parser_result.get_schema(None, None)
+        schema_result = parser_result.get_schema(None, None, "BodyLen,TemplateID".split(','))
 
         self.assertEqual(schema_result.name, "eti_Cash")
         self.assertEqual(schema_result.version, "13.1")
         self.assertEqual(schema_result.sub_version, "C0002")
         self.assertEqual(schema_result.build_number, "131.430.2.ga-131004030-47")
+        self.assertEqual(len(schema_result.initial_message_fields), 2)
+
+        self.assertTrue("BodyLen" in  schema_result.initial_message_fields)
+        self.assertTrue("TemplateID" in  schema_result.initial_message_fields)
 
         # Test data types
         data_type_ApplID = schema_result.data_types["ApplID"]
@@ -450,14 +454,16 @@ class Testing_Parser(unittest.TestCase):
 
     def test_generator_from_file_eti_Cash(self):
         parser_result = Parser.from_file("resources/eti_Cash.xml")
-        schema_result = parser_result.get_schema(ByteOrder.BIG_ENDIAN, None)
+        schema_result = parser_result.get_schema(ByteOrder.BIG_ENDIAN, None, "BodyLen,TemplateID".split(','))
 
         self.assertEqual(len(schema_result.application_messages), 137)
         self.assertEqual(len(schema_result.data_types), 443)
+        self.assertEqual(len(schema_result.initial_message_fields), 2)
 
     def test_generator_from_file_eti_Derivatives(self):
         parser_result = Parser.from_file("resources/eti_Derivatives.xml")
-        schema_result = parser_result.get_schema(ByteOrder.BIG_ENDIAN, None)
+        schema_result = parser_result.get_schema(ByteOrder.BIG_ENDIAN, None, "BodyLen,TemplateID".split(','))
 
         self.assertEqual(len(schema_result.application_messages), 161)
         self.assertEqual(len(schema_result.data_types), 532)
+        self.assertEqual(len(schema_result.initial_message_fields), 2)

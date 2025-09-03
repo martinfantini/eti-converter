@@ -270,4 +270,5 @@ class DefinitionHelper:
             build_number = parsed_schema.build_number,
             byte_order = parsed_schema.byte_order,
             name = parsed_schema.name,
+            initial_message_fields = parsed_schema.initial_message_fields,
         )
