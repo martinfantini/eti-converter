@@ -105,7 +105,7 @@ class Parser:
     def parse_structure_structure_from_node(self, node: ET.Element) -> Structures_Structure:
         name_str = attr(node, 'name')
         structure_type = attr(node, 'type')
-        numeric_id_int = attr(node, 'numericID', None)
+        numeric_id_int = attr(node, 'numericID', None, int)
         package_str = attr(node, 'package')
         description_str = attr(node, 'description', None)
         members_dict = UniqueKeysDict()
@@ -227,7 +227,7 @@ class Parser:
         name_str = attr(node, 'name')
         package_str = attr(node, 'package')
         application_message_type_str = attr(node, 'type')
-        numeric_id_int = attr(node, 'numericID')
+        numeric_id_int = attr(node, 'numericID', None, int)
         description_str = attr(node, 'description', None)
         functional_category_str = attr(node, 'functionalCategory')
         alias_str = attr(node, 'alias')
