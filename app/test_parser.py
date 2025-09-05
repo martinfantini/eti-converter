@@ -145,7 +145,7 @@ class Testing_Parser(unittest.TestCase):
         self.assertEqual(structure_member_MHO.member_type, "MessageHeaderOutComp")
         self.assertEqual(structure_member_MHO.package, "eti_Cash")
         self.assertEqual(structure_member_MHO.min_cardinality, None)
-        self.assertEqual(structure_member_MHO.cardinality, '1')
+        self.assertEqual(structure_member_MHO.cardinality, 1)
         self.assertEqual(structure_member_MHO.counter, None)
         self.assertEqual(structure_member_MHO.description, "")
 
@@ -161,7 +161,7 @@ class Testing_Parser(unittest.TestCase):
         self.assertEqual(last_valid_value.member_type, "VarText")
         self.assertEqual(last_valid_value.package, "eti_Cash")
         self.assertEqual(last_valid_value.min_cardinality, None)
-        self.assertEqual(last_valid_value.cardinality, '1')
+        self.assertEqual(last_valid_value.cardinality, 1)
         self.assertEqual(last_valid_value.counter, "VarTextLen")
         self.assertEqual(structure_member_MHO.description, "")
 
@@ -321,7 +321,7 @@ class Testing_Parser(unittest.TestCase):
         self.assertEqual(group_MHO.group_type, "MessageHeaderOutComp")
         self.assertEqual(group_MHO.package, "eti_Cash")
         self.assertEqual(group_MHO.min_cardinality, None)
-        self.assertEqual(group_MHO.cardinality, '1')
+        self.assertEqual(group_MHO.cardinality, 1)
         self.assertEqual(group_MHO.description, "")
         self.assertEqual(len(group_MHO.members), 3)
 
@@ -329,20 +329,20 @@ class Testing_Parser(unittest.TestCase):
         self.assertEqual(group_MHO_member_BL.name, "BodyLen")
         self.assertEqual(group_MHO_member_BL.member_type, "BodyLen")
         self.assertEqual(group_MHO_member_BL.package, "eti_Cash")
-        self.assertEqual(group_MHO_member_BL.numeric_id, '9')
+        self.assertEqual(group_MHO_member_BL.numeric_id, 9)
         self.assertEqual(group_MHO_member_BL.usage.value, ApplicationMessage_Usage.MANDATORY.value)
-        self.assertEqual(group_MHO_member_BL.offset, '0')
-        self.assertEqual(group_MHO_member_BL.cardinality, '1')
+        self.assertEqual(group_MHO_member_BL.offset, 0)
+        self.assertEqual(group_MHO_member_BL.cardinality, 1)
         self.assertEqual(group_MHO_member_BL.description, "")
 
         group_MHO_member_Pad2 = group_MHO.members["Pad2"]
         self.assertEqual(group_MHO_member_Pad2.name, "Pad2")
         self.assertEqual(group_MHO_member_Pad2.member_type, "Pad2")
         self.assertEqual(group_MHO_member_Pad2.package, "eti_Cash")
-        self.assertEqual(group_MHO_member_Pad2.numeric_id, '39020')
+        self.assertEqual(group_MHO_member_Pad2.numeric_id, 39020)
         self.assertEqual(group_MHO_member_Pad2.usage.value, ApplicationMessage_Usage.UNUSED.value)
-        self.assertEqual(group_MHO_member_Pad2.offset, '6')
-        self.assertEqual(group_MHO_member_Pad2.cardinality, '1')
+        self.assertEqual(group_MHO_member_Pad2.offset, 6)
+        self.assertEqual(group_MHO_member_Pad2.cardinality, 1)
         self.assertEqual(group_MHO_member_Pad2.description, "")
 
         self.assertEqual(len(group_dict), 2)
@@ -406,7 +406,7 @@ class Testing_Parser(unittest.TestCase):
         self.assertEqual(structure_member_MHO.member_type, "MessageHeaderOutComp")
         self.assertEqual(structure_member_MHO.package, "eti_Cash")
         self.assertEqual(structure_member_MHO.min_cardinality, None)
-        self.assertEqual(structure_member_MHO.cardinality, '1')
+        self.assertEqual(structure_member_MHO.cardinality, 1)
         self.assertEqual(structure_member_MHO.counter, None)
         self.assertEqual(structure_member_MHO.description, "")
 
@@ -428,7 +428,7 @@ class Testing_Parser(unittest.TestCase):
         self.assertEqual(group_MHO.group_type, "MessageHeaderOutComp")
         self.assertEqual(group_MHO.package, "eti_Cash")
         self.assertEqual(group_MHO.min_cardinality, None)
-        self.assertEqual(group_MHO.cardinality, '1')
+        self.assertEqual(group_MHO.cardinality, 1)
         self.assertEqual(group_MHO.description, "")
         self.assertEqual(len(group_MHO.members), 3)
 
@@ -436,20 +436,20 @@ class Testing_Parser(unittest.TestCase):
         self.assertEqual(group_MHO_member_BL.name, "BodyLen")
         self.assertEqual(group_MHO_member_BL.member_type, "BodyLen")
         self.assertEqual(group_MHO_member_BL.package, "eti_Cash")
-        self.assertEqual(group_MHO_member_BL.numeric_id, '9')
+        self.assertEqual(group_MHO_member_BL.numeric_id, 9)
         self.assertEqual(group_MHO_member_BL.usage.value, ApplicationMessage_Usage.MANDATORY.value)
-        self.assertEqual(group_MHO_member_BL.offset, '0')
-        self.assertEqual(group_MHO_member_BL.cardinality, '1')
+        self.assertEqual(group_MHO_member_BL.offset, 0)
+        self.assertEqual(group_MHO_member_BL.cardinality, 1)
         self.assertEqual(group_MHO_member_BL.description, "")
 
         group_MHO_member_Pad2 = group_MHO.members["Pad2"]
         self.assertEqual(group_MHO_member_Pad2.name, "Pad2")
         self.assertEqual(group_MHO_member_Pad2.member_type, "Pad2")
         self.assertEqual(group_MHO_member_Pad2.package, "eti_Cash")
-        self.assertEqual(group_MHO_member_Pad2.numeric_id, '39020')
+        self.assertEqual(group_MHO_member_Pad2.numeric_id, 39020)
         self.assertEqual(group_MHO_member_Pad2.usage.value, ApplicationMessage_Usage.UNUSED.value)
-        self.assertEqual(group_MHO_member_Pad2.offset, '6')
-        self.assertEqual(group_MHO_member_Pad2.cardinality, '1')
+        self.assertEqual(group_MHO_member_Pad2.offset, 6)
+        self.assertEqual(group_MHO_member_Pad2.cardinality, 1)
         self.assertEqual(group_MHO_member_Pad2.description, "")
 
     def test_generator_from_file_eti_Cash(self):

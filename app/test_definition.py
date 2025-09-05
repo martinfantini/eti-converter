@@ -210,13 +210,13 @@ class Testing_Definition(unittest.TestCase):
         result_group_definition_InstrmtLegGrp = result_group_definition_dict["InstrmtLegGrp"]
         self.assertEqual(result_group_definition_InstrmtLegGrp.name, "InstrmtLegGrp")
         self.assertEqual(result_group_definition_InstrmtLegGrp.counter, 'NoLegOnbooks')
-        self.assertEqual(result_group_definition_InstrmtLegGrp.cardinality, '144')
+        self.assertEqual(result_group_definition_InstrmtLegGrp.cardinality, 144)
         self.assertEqual(len(result_group_definition_InstrmtLegGrp.members), 2)
 
         result_group_definition_MessageHeaderOut = result_group_definition_dict["MessageHeaderOut"]
         self.assertEqual(result_group_definition_MessageHeaderOut.name, "MessageHeaderOut")
         self.assertEqual(result_group_definition_MessageHeaderOut.counter, None)
-        self.assertEqual(result_group_definition_MessageHeaderOut.cardinality, '1')
+        self.assertEqual(result_group_definition_MessageHeaderOut.cardinality, 1)
         self.assertEqual(len(result_group_definition_MessageHeaderOut.members), 3)
 
     def test_get_message_definition_dict(self):

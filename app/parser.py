@@ -82,8 +82,8 @@ class Parser:
         name_str = attr(node, 'name')
         member_type_str = attr(node, 'type')
         package_str = attr(node, 'package')
-        min_cardinality_int = attr(node, 'minCardinality', None)
-        cardinality_int = attr(node, 'cardinality')
+        min_cardinality_int = attr(node, 'minCardinality', None, int)
+        cardinality_int = attr(node, 'cardinality', None, int)
         counter_str = attr(node, 'counter', None)
         if counter_str != None:
             if members[counter_str] == None:
@@ -152,10 +152,10 @@ class Parser:
             raise Exception(f'member "{name_str}" has a type "{member_type_str}" is not valid')
         
         package_str = attr(node, 'package')
-        numeric_id_int = attr(node, 'numericID')
+        numeric_id_int = attr(node, 'numericID', None, int)
         usage_enum = attr(node, 'usage', ApplicationMessage_Usage.MANDATORY, cast=ApplicationMessage_Usage)
-        offset_int = attr(node, 'offset')
-        cardinality_int = attr(node, 'cardinality')
+        offset_int = attr(node, 'offset', None, int)
+        cardinality_int = attr(node, 'cardinality', None, int)
         description_str = attr(node, 'description', None)
         offset_base_str = attr(node, 'offsetBase', None)
         valid_value_dict = UniqueKeysDict()
@@ -196,8 +196,8 @@ class Parser:
         name_str = attr(node, 'name')
         group_type_str = attr(node, 'type')
         package_str = attr(node, 'package')
-        min_cardinality_int = attr(node, 'minCardinality', None)
-        cardinality_int = attr(node, 'cardinality', None)
+        min_cardinality_int = attr(node, 'minCardinality', None, int)
+        cardinality_int = attr(node, 'cardinality', None, int)
         description_str = attr(node, 'description', None)
         counter_str = attr(node, 'counter', None)
         if counter_str != None and not counter_str in fields:
