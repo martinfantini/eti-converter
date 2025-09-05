@@ -230,7 +230,7 @@ class Testing_Definition(unittest.TestCase):
         self.assertEqual(len(result_message_definition), 1)
 
         result_message_definition_BroadcastErrorNotification = result_message_definition["BroadcastErrorNotification"]
-        self.assertEqual(result_message_definition_BroadcastErrorNotification.numeric_id, '10032')
+        self.assertEqual(result_message_definition_BroadcastErrorNotification.numeric_id, 10032)
         self.assertEqual(result_message_definition_BroadcastErrorNotification.name, "BroadcastErrorNotification")
         self.assertEqual(result_message_definition_BroadcastErrorNotification.package, "eti_Cash")
         self.assertEqual(len(result_message_definition_BroadcastErrorNotification.members_or_groups), 11)

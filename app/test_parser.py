@@ -134,7 +134,7 @@ class Testing_Parser(unittest.TestCase):
         structure_XetraEnLightStatusBroadcast = structures_dict["XetraEnLightStatusBroadcast"]
         self.assertEqual(structure_XetraEnLightStatusBroadcast.name, "XetraEnLightStatusBroadcast")
         self.assertEqual(structure_XetraEnLightStatusBroadcast.structure_type, "Message")
-        self.assertEqual(structure_XetraEnLightStatusBroadcast.numeric_id, '10814')
+        self.assertEqual(structure_XetraEnLightStatusBroadcast.numeric_id, 10814)
         self.assertEqual(structure_XetraEnLightStatusBroadcast.package, "eti_Cash")
         self.assertEqual(structure_XetraEnLightStatusBroadcast.description, "")
 
@@ -152,7 +152,7 @@ class Testing_Parser(unittest.TestCase):
         structure_BEN = structures_dict["BroadcastErrorNotification"]
         self.assertEqual(structure_BEN.name, "BroadcastErrorNotification")
         self.assertEqual(structure_BEN.structure_type, "Message")
-        self.assertEqual(structure_BEN.numeric_id, '10032')
+        self.assertEqual(structure_BEN.numeric_id, 10032)
         self.assertEqual(structure_BEN.package, "eti_Cash")
         self.assertEqual(structure_BEN.description, "")
 
@@ -308,7 +308,7 @@ class Testing_Parser(unittest.TestCase):
         self.assertEqual(application_messages_BEN.name, "BroadcastErrorNotification")
         self.assertEqual(application_messages_BEN.package, "eti_Cash")
         self.assertEqual(application_messages_BEN.application_message_type, "BroadcastErrorNotification")
-        self.assertEqual(application_messages_BEN.numeric_id, '10032')
+        self.assertEqual(application_messages_BEN.numeric_id, 10032)
         self.assertEqual(application_messages_BEN.description, "")
         self.assertEqual(application_messages_BEN.functional_category, "Other")
         self.assertEqual(application_messages_BEN.alias, "Gap Fill")
@@ -395,7 +395,7 @@ class Testing_Parser(unittest.TestCase):
         structure_XetraEnLightStatusBroadcast = schema_result.structure["XetraEnLightStatusBroadcast"]
         self.assertEqual(structure_XetraEnLightStatusBroadcast.name, "XetraEnLightStatusBroadcast")
         self.assertEqual(structure_XetraEnLightStatusBroadcast.structure_type, "Message")
-        self.assertEqual(structure_XetraEnLightStatusBroadcast.numeric_id, '10814')
+        self.assertEqual(structure_XetraEnLightStatusBroadcast.numeric_id, 10814)
         self.assertEqual(structure_XetraEnLightStatusBroadcast.package, "eti_Cash")
         self.assertEqual(structure_XetraEnLightStatusBroadcast.description, "")
 
@@ -415,7 +415,7 @@ class Testing_Parser(unittest.TestCase):
         self.assertEqual(application_messages_BEN.name, "BroadcastErrorNotification")
         self.assertEqual(application_messages_BEN.package, "eti_Cash")
         self.assertEqual(application_messages_BEN.application_message_type, "BroadcastErrorNotification")
-        self.assertEqual(application_messages_BEN.numeric_id, '10032')
+        self.assertEqual(application_messages_BEN.numeric_id, 10032)
         self.assertEqual(application_messages_BEN.description, "")
         self.assertEqual(application_messages_BEN.functional_category, "Other")
         self.assertEqual(application_messages_BEN.alias, "Gap Fill")
