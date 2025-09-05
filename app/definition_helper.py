@@ -250,7 +250,7 @@ class DefinitionHelper:
             elif isinstance(parsed_application_message_members, ApplicationMessage_Group):
                 result =  DefinitionHelper.get_application_message_group_definition(parsed_application_message_members, dataType_definition, groupType_definition)
                 members_or_groups_dict[result.name] = result
-                size_bytes_count += result.size_bytes
+                size_bytes_count += (result.size_bytes * result.cardinality)
             else:
                 raise Exception(f'Error in internal type "{parsed_application_message_members.name}" is not a group or member')
 
